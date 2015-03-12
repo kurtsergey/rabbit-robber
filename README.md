@@ -1,5 +1,7 @@
 # chicken-thief
 
-Перетащите в закладки
+Добавьте в закладки Bookmarklet
 
-[Bookmarklet](javascript: (function (\){var s = document.createElement('script'\); s.type = "text/javascript"; s.src = 'https://raw.githubusercontent.com/kurtsergey/chicken-thief/master/app.js'; document.body.appendChild(s\);}\)(\);)
+'''javascript
+javascript: (function (){var s = document.createElement('script'); s.type = "text/javascript"; s.src = 'https://raw.githubusercontent.com/kurtsergey/chicken-thief/master/app.js'; document.body.appendChild(s);})();
+```
