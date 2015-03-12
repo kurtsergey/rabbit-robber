@@ -1,6 +1,8 @@
 # chicken-thief
 
-Добавьте в закладки Bookmarklet
+Добавьте в закладки Bookmarklet, представленный ниже, откройте какой-либо сайт и запустите закладку
+Может не работать на сайтах с жесткой Content Security Policy
+
 
 ```javascript
 javascript: 
