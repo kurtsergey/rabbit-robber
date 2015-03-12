@@ -72,12 +72,19 @@
         }
         while (!nodes.length && tries < 1000)
 
-        var n = getRandomEl(nodes);
+        if (s && s.length && el && isElementInViewport(el) && nodes && nodes.length)
+        {
+            var n = getRandomEl(nodes);
 
-        moveChicken({
-            el: el,
-            textNode: n
-        });
+            moveChicken({
+                el: el,
+                textNode: n
+            });
+        }
+        else
+        {
+            setTimeout(selectVictim, 3000);
+        }
     }
 
 
