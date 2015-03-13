@@ -2,7 +2,7 @@
 
 Добавьте в закладки Bookmarklet, представленный ниже, откройте какой-либо сайт и запустите закладку.
 
-Можно запустить несколько раз, но пока создаваемый зверёк немного требователен к ресурсам компьютера.
+Можно запустить несколько раз, но пока создаваемый зверь требователен к ресурсам компьютера.
 
 Может не работать на сайтах с жесткой Content Security Policy, таких как GitHub.
 
@@ -23,5 +23,5 @@ else if (window.RabbitRobber)
 {
 new RabbitRobber();
 }
-})('https://rawgit.com/kurtsergey/chicken-thief/master/app.js');
+})('https://rawgit.com/kurtsergey/rabbit-robber/master/app.js');
 ```
