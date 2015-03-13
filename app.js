@@ -171,8 +171,8 @@
     {
         var bounds = heap.getBoundingClientRect();
 
-        this.elCt.style.left = (bounds.left + 70 + (Math.random() - 0.5) * 10) + 'px';
-        this.elCt.style.top = (bounds.top - 25 + (Math.random() - 0.5) * 5) + 'px';
+        this.elCt.style.left = (bounds.left + 70 + (Math.random() - 0.5) * 20) + 'px';
+        this.elCt.style.top = (bounds.top - 35 + (Math.random() - 0.5) * 10) + 'px';
 
         setTimeout(this.dump.bind(this), 1500);
     }
