@@ -144,6 +144,9 @@
 
 
 
+
+
+
     var style = document.createElement('style');
     style.type = 'text/css';
     style.innerHTML = '\
@@ -180,7 +183,7 @@
         border-radius: 100%;\
         top: 10px;\
         left: -6px;\
-        box-shadow: 80px 8px 0 -8px #3f3334, 10px 40px 0 #ddd, 80px 35px 0 -6px #ddd, 4px 35px 0 -4px #ddd, 88px 38px 0 -4px #ddd;\
+        box-shadow: 80px 8px 0 -8px #3f3334,    92px 20px 0 -9px #888, 93px 21px 0 -9px #888, 94px 21px 0 -9px #888, 95px 21px 0 -9px #888,     10px 40px 0 #ddd, 80px 35px 0 -6px #ddd, 4px 35px 0 -4px #ddd, 88px 38px 0 -4px #ddd;\
     }\
     \
     .rabbit:after {\
@@ -198,19 +201,24 @@
         top: -25px;\
         border-top: 1px solid #f7f5f4;\
         border-left: 1px solid #f7f5f4;\
-        -webkit-box-shadow: -10px 0 0 -2px #ddd;\
         box-shadow: -10px 0 0 -2px #ddd;\
         transform-origin: 80% 100%;\
     }\
     \
     .rabbit.eaten:after {\
-        -moz-animation: eat 0.5s infinite linear forwards;\
-        -ms-animation: eat 0.5s infinite linear forwards;\
-        -webkit-animation: eat 0.3s infinite linear forwards;\
-        animation: eat 0.3s infinite linear forwards;\
+        -moz-animation: ears 0.5s infinite linear forwards;\
+        -ms-animation: ears 0.5s infinite linear forwards;\
+        -webkit-animation: ears 0.3s infinite linear forwards;\
+        animation: ears 0.3s infinite linear forwards;\
+    }\
+    .rabbit.eaten:before {\
+        -moz-animation: mouth 0.3s infinite linear forwards;\
+        -ms-animation: mouth 0.3s infinite linear forwards;\
+        -webkit-animation: mouth 0.3s infinite linear forwards;\
+        animation: mouth 0.3s infinite linear forwards;\
     }\
     \
-    @-webkit-keyframes eat {\
+    @-webkit-keyframes ears {\
     0% {\
         -moz-transform: rotate(-35deg);\
         -ms-transform: rotate(-35deg);\
@@ -225,7 +233,7 @@
     }\
     }\
     \
-    @keyframes eat {\
+    @keyframes ears {\
     0% {\
         -moz-transform: rotate(-35deg);\
         -ms-transform: rotate(-35deg);\
@@ -239,6 +247,25 @@
         transform: rotate(-20deg);\
     }\
     }\
+    \
+    @-webkit-keyframes mouth {\
+    0% {\
+        box-shadow: 80px 8px 0 -8px #3f3334,    92px 20px 0 -9px #888,  93px 21px 0 -9px #888,  94px 21px 0 -9px #888, 95px 21px 0 -9px #888,     10px 40px 0 #ddd, 80px 35px 0 -6px #ddd, 4px 35px 0 -4px #ddd, 88px 38px 0 -4px #ddd;\
+    }\
+    50% {\
+        box-shadow: 80px 8px 0 -8px #3f3334,    92px 20px 0 -10px #888, 93px 21px 0 -10px #888, 94px 21px 0 -9px #888, 95px 21px 0 -9px #888,     10px 40px 0 #ddd, 80px 35px 0 -6px #ddd, 4px 35px 0 -4px #ddd, 88px 38px 0 -4px #ddd;\
+    }\
+    }\
+    \
+    @keyframes mouth {\
+    0% {\
+        box-shadow: 80px 8px 0 -8px #3f3334,    92px 20px 0 -9px #888,  93px 21px 0 -9px #888,  94px 21px 0 -9px #888, 95px 21px 0 -9px #888,     10px 40px 0 #ddd, 80px 35px 0 -6px #ddd, 4px 35px 0 -4px #ddd, 88px 38px 0 -4px #ddd;\
+    }\
+    50% {\
+        box-shadow: 80px 8px 0 -8px #3f3334,    92px 20px 0 -10px #888, 93px 21px 0 -10px #888, 94px 21px 0 -9px #888, 95px 21px 0 -9px #888,     10px 40px 0 #ddd, 80px 35px 0 -6px #ddd, 4px 35px 0 -4px #ddd, 88px 38px 0 -4px #ddd;\
+    }\
+    }\
+    \
 ';
     document.getElementsByTagName('head')[0].appendChild(style);
 
