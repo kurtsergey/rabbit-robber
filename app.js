@@ -23,7 +23,11 @@
             {
                 for (var i = 0, len = node.childNodes.length; i < len; ++i)
                 {
-                    if (node.childNodes[i].tagName != 'STYLE' && node.childNodes[i].tagName != 'SCRIPT' && node.childNodes[i].tagName != 'SCRIPT' && node.childNodes[i].tagName != 'RABBITROBBERVICTIM')
+                    if (node.childNodes[i].tagName != 'STYLE' &&
+                        node.childNodes[i].tagName != 'SCRIPT' &&
+                        node.childNodes[i].tagName != 'SCRIPT' &&
+                        node.childNodes[i].tagName != 'RABBITROBBERVICTIM' &&
+                        node.childNodes[i].tagName != 'RABBITROBBERHEAP')
                     {
                         getTextNodes(node.childNodes[i]);
                     }
@@ -54,6 +58,9 @@
 
     window.RabbitRobber = function ()
     {
+        this.stolen = [];
+
+
         var ct = this.elCt = document.createElement('div');
         ct.className = 'rabbit-ct';
         document.body.appendChild(ct);
@@ -130,6 +137,7 @@
     }
 
 
+
     window.RabbitRobber.prototype.rob = function rob(victim)
     {
         if (!this.el.classList.contains('eaten'))
@@ -137,18 +145,56 @@
             this.el.classList.add('eaten');
         }
 
+        this.stolen.push(victim.textContent[0]);
         victim.textContent = victim.textContent.substr(1);
         victim.countStolen = (victim.countStolen || 0) + 1;
 
         if (victim.countStolen >= 10 || !victim.textContent.length)
         {
             this.el.classList.remove('eaten');
-            setTimeout(this.selectVictim.bind(this), 300);
+            if (Math.random() > 0.7)
+            {
+                setTimeout(this.moveToHeap.bind(this), 300);
+            }
+            else
+            {
+                setTimeout(this.selectVictim.bind(this), 300);
+            }
         }
         else
         {
             setTimeout(this.rob.bind(this, victim), 200);
         }
+    }
+
+    window.RabbitRobber.prototype.moveToHeap = function moveToHeap()
+    {
+        var bounds = heap.getBoundingClientRect();
+
+        this.elCt.style.left = (bounds.left + 70 + (Math.random() - 0.5) * 10) + 'px';
+        this.elCt.style.top = (bounds.top - 25 + (Math.random() - 0.5) * 5) + 'px';
+
+        setTimeout(this.dump.bind(this), 1500);
+    }
+
+    window.RabbitRobber.prototype.dump = function dump()
+    {
+        for (var i = 0; i < 5 && i < this.stolen.length; ++i)
+        {
+            var span = document.createElement('span');
+            span.textContent = this.stolen[i];
+            heap.appendChild(span);
+            setTimeout(function (span)
+            {
+                ++heap.countDumped;
+                span.style.left = (50 + (Math.random() - 0.5) * heap.countDumped / 2) + 'px';
+                span.style.bottom = ((Math.random()) * heap.countDumped / 5) + 'px';
+            }.bind(this, span), 20 * i);
+        }
+
+        this.stolen = [];
+
+        setTimeout(this.selectVictim.bind(this), 300);
     }
 
 
@@ -162,6 +208,13 @@
 
     new RabbitRobber();
 
+
+    var heapct = document.createElement('rabbitrobberheapct');
+    document.body.appendChild(heapct);
+
+    var heap = document.createElement('rabbitrobberheap');
+    heapct.appendChild(heap);
+    heap.countDumped = 0;
 
 
 
@@ -289,6 +342,31 @@
     }\
     }\
     \
+    rabbitrobberheapct {\
+        display: block;\
+        position: fixed;\
+        left: 0;\
+        bottom: 0;\
+        width: 100px;\
+        height: 100px;\
+    }\
+    rabbitrobberheap {\
+        display: block;\
+        position: relative;\
+        left: 0;\
+        bottom: 0;\
+        width: 100px;\
+        height: 100px;\
+    }\
+    rabbitrobberheap span{\
+        font-size: 10px;\
+        font-weight: bold;\
+        display: block;\
+        position: absolute;\
+        left: 50%;\
+        bottom: 50%;\
+        transition: left 0.7s ease-in 0.3s, bottom 0.7s ease-in 0.3s\
+    }\
 ';
     document.getElementsByTagName('head')[0].appendChild(style);
 
