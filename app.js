@@ -349,6 +349,7 @@
         bottom: 0;\
         width: 200px;\
         height: 100px;\
+        z-index: 1000000;\
     }\
     rabbitrobberheap {\
         display: block;\
