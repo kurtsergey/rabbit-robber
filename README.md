@@ -6,6 +6,8 @@
 
 Может не работать на сайтах с жесткой Content Security Policy.
 
+Прототип CSS-кролика позаимствован на [codepen.io](http://codepen.io/katydecorah/pen/uIEFy)
+
 
 ```javascript
 javascript: 
