@@ -4,6 +4,51 @@
 {
 
 
+    function wrapAllVictims()
+    {
+        var node = document.querySelector('body');
+
+        var textNodes = [], nonWhitespaceMatcher = /\S/;
+
+        function getTextNodes(node)
+        {
+            if (node.nodeType == 3)
+            {
+                if (nonWhitespaceMatcher.test(node.nodeValue))
+                {
+                    textNodes.push(node);
+                }
+            }
+            else
+            {
+                for (var i = 0, len = node.childNodes.length; i < len; ++i)
+                {
+                    getTextNodes(node.childNodes[i]);
+                }
+            }
+        }
+
+        getTextNodes(node);
+
+
+        for (var i = 0; i < textNodes.length; ++i)
+        {
+            var n = textNodes[i];
+            if (n.parentNode.tagName !== 'rabbitrobbervictim')
+            {
+                var vel = document.createElement('rabbitrobbervictim');
+                n.parentNode.insertBefore(vel, n);
+                vel.appendChild(n);
+            }
+        }
+    }
+
+
+
+
+
+
+
     window.RabbitRobber = function ()
     {
         var ct = this.elCt = document.createElement('div');
@@ -27,72 +72,39 @@
     }
 
 
-    window.RabbitRobber.prototype.getTextNodesIn = function getTextNodesIn(node, includeWhitespaceNodes)
-    {
-        var textNodes = [], nonWhitespaceMatcher = /\S/;
-
-        function getTextNodes(node)
-        {
-            if (node.nodeType == 3)
-            {
-                if (includeWhitespaceNodes || nonWhitespaceMatcher.test(node.nodeValue))
-                {
-                    textNodes.push(node);
-                }
-            } else
-            {
-                for (var i = 0, len = node.childNodes.length; i < len; ++i)
-                {
-                    getTextNodes(node.childNodes[i]);
-                }
-            }
-        }
-
-        getTextNodes(node);
-        return textNodes;
-    }
-
-
     window.RabbitRobber.prototype.isElementInViewport = function isElementInViewport(el)
     {
         var rect = el.getBoundingClientRect();
 
         return (
-            rect.top > 0 &&
-            rect.left > 0 &&
-            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-            rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+            rect.top >= 0 &&
+            rect.left >= 0 &&
+            rect.top <= (window.innerHeight || document.documentElement.clientHeight) &&
+            rect.left <= (window.innerWidth || document.documentElement.clientWidth)
         );
     }
 
 
     window.RabbitRobber.prototype.selectVictim = function selectVictim()
     {
-        var els = document.querySelectorAll('* *:not(title)');
+        var els = document.querySelectorAll('rabbitrobbervictim');
 
-        var tries = 0;
-        do
+        var el,
+            tries = 0;
+
+        if (els.length)
         {
             do
             {
                 var el = this.getRandomEl(els);
-                var s = el.innerText;
                 ++tries;
             }
-            while ((!s || !s.length || !this.isElementInViewport(el)) && tries < 1000);
-
-            var nodes = this.getTextNodesIn(el);
+            while ((!el || !el.innerText.length || !this.isElementInViewport(el)) && tries < 200);
         }
-        while (!nodes.length && tries < 1000)
 
-        if (tries < 1000)
+        if (tries < 200 && el)
         {
-            var n = this.getRandomEl(nodes);
-
-            this.move({
-                el: el,
-                textNode: n
-            });
+            this.move(el);
         }
         else
         {
@@ -103,7 +115,7 @@
 
     window.RabbitRobber.prototype.move = function move(victim)
     {
-        var bounds = victim.el.getBoundingClientRect();
+        var bounds = victim.getBoundingClientRect();
 
         this.elCt.style.left = (bounds.left - 60 + (Math.random() - 0.5) * 10) + 'px';
         this.elCt.style.top = (bounds.top - 25 + (Math.random() - 0.5) * 5) + 'px';
@@ -119,10 +131,10 @@
             this.el.classList.add('eaten');
         }
 
-        victim.textNode.textContent = victim.textNode.textContent.substr(1);
+        victim.textContent = victim.textContent.substr(1);
         victim.count = (victim.count || 0) + 1;
 
-        if (victim.count >= 10 || !victim.textNode.textContent.length)
+        if (victim.count >= 10 || !victim.textContent.length)
         {
             this.el.classList.remove('eaten');
             setTimeout(this.selectVictim.bind(this), 300);
@@ -135,8 +147,14 @@
 
 
 
-    new RabbitRobber();
 
+
+
+    wrapAllVictims();
+    setInterval(wrapAllVictims, 5000);
+
+
+    new RabbitRobber();
 
 
 
