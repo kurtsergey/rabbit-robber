@@ -11,10 +11,17 @@
 
 ```javascript
 javascript: 
-(function (){
-var s = document.createElement('script'); 
+(function (src){
+if (!window.RabbitRobberScript)
+{
+var s = window.RabbitRobberScript = document.createElement('script'); 
 s.type = "text/javascript"; 
-s.src = 'https://rawgit.com/kurtsergey/chicken-thief/master/app.js'; 
+s.src = src; 
 document.body.appendChild(s);
-})();
+}
+else if (window.RabbitRobber)
+{
+new RabbitRobber();
+}
+})('https://rawgit.com/kurtsergey/chicken-thief/master/app.js');
 ```
