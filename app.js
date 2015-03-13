@@ -72,7 +72,7 @@
         }
         while (!nodes.length && tries < 1000)
 
-        if (s && s.length && el && isElementInViewport(el) && nodes && nodes.length)
+        if (tries < 1000)
         {
             var n = getRandomEl(nodes);
 
@@ -95,8 +95,8 @@
     {
         var bounds = victim.el.getBoundingClientRect();
 
-        div.style.left = (bounds.left - 60) + 'px';
-        div.style.top = (bounds.top - 25) + 'px';
+        div.style.left = (bounds.left - 60 + (Math.random() - 0.5) * 10) + 'px';
+        div.style.top = (bounds.top - 25 + (Math.random() - 0.5) * 5) + 'px';
 
         setTimeout(thieveChair.bind(this, victim), 1500);
     }
@@ -153,13 +153,14 @@
         left: 300px;\
         top: 300px;\
         position: fixed;\
-        transition: left 0.7s ease-out 0.3s, top 0.7s ease-out 0.3s\
+        z-index: 1000000;\
+        transition: left 0.7s ease-in-out 0.3s, top 0.7s ease-in-out 0.3s\
     }\
     \
     .rabbit {\
         width: 100px;\
         height: 60px;\
-        background: #ccc;\
+        background: #ddd;\
         border-radius: 70% 90% 60% 50%;\
         position: relative;\
         -moz-transform: rotate(0deg) translate(-40px, 0);\
@@ -167,6 +168,7 @@
         -webkit-transform: rotate(0deg) translate(-40px, 0);\
         transform: rotate(0deg) translate(-40px, 0);\
         z-index: 1;\
+        box-shadow: 0 0 4px rgba(150,150,150,0.5);\
     }\
     \
     .rabbit:before {\
@@ -174,11 +176,11 @@
         position: absolute;\
         width: 20px;\
         height: 20px;\
-        background: #ccc;\
+        background: #ddd;\
         border-radius: 100%;\
         top: 10px;\
         left: -6px;\
-        box-shadow: 80px 8px 0 -8px #3f3334, 10px 40px 0 #ccc, 80px 35px 0 -6px #ccc, 4px 35px 0 -4px #ccc, 88px 38px 0 -4px #ccc;\
+        box-shadow: 80px 8px 0 -8px #3f3334, 10px 40px 0 #ddd, 80px 35px 0 -6px #ddd, 4px 35px 0 -4px #ddd, 88px 38px 0 -4px #ddd;\
     }\
     \
     .rabbit:after {\
@@ -186,23 +188,24 @@
         position: absolute;\
         width: 15px;\
         height: 40px;\
-        background: #ccc;\
+        background: #ddd;\
         border-radius: 50% 100% 0 0;\
         -moz-transform: rotate(-30deg);\
         -ms-transform: rotate(-30deg);\
         -webkit-transform: rotate(-30deg);\
         transform: rotate(-30deg);\
-        right: 20px;\
-        top: -20px;\
+        right: 10px;\
+        top: -25px;\
         border-top: 1px solid #f7f5f4;\
         border-left: 1px solid #f7f5f4;\
-        -webkit-box-shadow: -10px 0 0 -2px #ccc;\
-        box-shadow: -10px 0 0 -2px #ccc;\
-        -moz-animation: eat 0.5s infinite linear forwards;\
-        -ms-animation: eat 0.5s infinite linear forwards;\
+        -webkit-box-shadow: -10px 0 0 -2px #ddd;\
+        box-shadow: -10px 0 0 -2px #ddd;\
+        transform-origin: 80% 100%;\
     }\
     \
     .rabbit.eaten:after {\
+        -moz-animation: eat 0.5s infinite linear forwards;\
+        -ms-animation: eat 0.5s infinite linear forwards;\
         -webkit-animation: eat 0.3s infinite linear forwards;\
         animation: eat 0.3s infinite linear forwards;\
     }\
