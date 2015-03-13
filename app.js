@@ -70,8 +70,11 @@
         r.className = 'rabbit';
         ct.appendChild(r);
 
-
-        setTimeout(this.selectVictim.bind(this), 200);
+        var self = this;
+        setTimeout(function ()
+        {
+            self.selectVictim();
+        }, 200);
     };
 
 
@@ -119,7 +122,11 @@
         }
         else
         {
-            setTimeout(this.selectVictim.bind(this), 3000);
+            var self = this;
+            setTimeout(function ()
+            {
+                self.selectVictim();
+            }, 3000);
         }
     }
 
@@ -133,7 +140,11 @@
 
         victim.countStolen = 0;
 
-        setTimeout(this.rob.bind(this, victim), 1500);
+        var self = this;
+        setTimeout(function ()
+        {
+            self.rob(victim);
+        }, 1500);
     }
 
 
@@ -149,21 +160,32 @@
         victim.textContent = victim.textContent.substr(1);
         victim.countStolen = (victim.countStolen || 0) + 1;
 
+        var self = this;
+
         if (victim.countStolen >= 10 || !victim.textContent.length)
         {
             this.el.classList.remove('eaten');
             if (Math.random() > 0.7)
             {
-                setTimeout(this.moveToHeap.bind(this), 300);
+                setTimeout(function ()
+                {
+                    self.moveToHeap();
+                }, 300);
             }
             else
             {
-                setTimeout(this.selectVictim.bind(this), 300);
+                setTimeout(function ()
+                {
+                    self.selectVictim();
+                }, 300);
             }
         }
         else
         {
-            setTimeout(this.rob.bind(this, victim), 200);
+            setTimeout(function ()
+            {
+                self.rob(victim);
+            }, 200);
         }
     }
 
@@ -174,7 +196,11 @@
         this.elCt.style.left = (bounds.left + 70 + (Math.random() - 0.5) * 20) + 'px';
         this.elCt.style.top = (bounds.top - 35 + (Math.random() - 0.5) * 10) + 'px';
 
-        setTimeout(this.dump.bind(this), 1500);
+        var self = this;
+        setTimeout(function ()
+        {
+            self.dump();
+        }, 1500);
     }
 
     window.RabbitRobber.prototype.dump = function dump()
@@ -184,17 +210,26 @@
             var span = document.createElement('span');
             span.textContent = this.stolen[i];
             heap.appendChild(span);
-            setTimeout(function (span)
+
+            (function (span, i)
             {
-                ++heap.countDumped;
-                span.style.left = (50 + (Math.random() - 0.5) * (heap.countDumped < 200 ? heap.countDumped : 200)) + 'px';
-                span.style.bottom = ((Math.random()) * (heap.countDumped < 500 ? heap.countDumped / 5 : 100)) + 'px';
-            }.bind(this, span), 50 * i);
+                setTimeout(function ()
+                {
+                    ++heap.countDumped;
+                    span.style.left = (50 + (Math.random() - 0.5) * (heap.countDumped < 200 ? heap.countDumped : 200)) + 'px';
+                    span.style.bottom = ((Math.random()) * (heap.countDumped < 500 ? heap.countDumped / 5 : 100)) + 'px';
+                }, 50 * i);
+            })(span, i);
+
         }
 
         this.stolen = [];
 
-        setTimeout(this.selectVictim.bind(this), 300);
+        var self = this;
+        setTimeout(function ()
+        {
+            self.selectVictim();
+        }, 300);
     }
 
 
