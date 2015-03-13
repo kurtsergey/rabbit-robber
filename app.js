@@ -187,9 +187,9 @@
             setTimeout(function (span)
             {
                 ++heap.countDumped;
-                span.style.left = (50 + (Math.random() - 0.5) * heap.countDumped / 2) + 'px';
-                span.style.bottom = ((Math.random()) * heap.countDumped / 5) + 'px';
-            }.bind(this, span), 20 * i);
+                span.style.left = (50 + (Math.random() - 0.5) * (heap.countDumped < 200 ? heap.countDumped : 200)) + 'px';
+                span.style.bottom = ((Math.random()) * (heap.countDumped < 500 ? heap.countDumped / 5 : 100)) + 'px';
+            }.bind(this, span), 50 * i);
         }
 
         this.stolen = [];
@@ -259,7 +259,7 @@
         border-radius: 100%;\
         top: 10px;\
         left: -6px;\
-        box-shadow: 80px 8px 0 -8px #3f3334,    92px 20px 0 -9px #888, 93px 21px 0 -9px #888, 94px 21px 0 -9px #888, 95px 21px 0 -9px #888,     10px 40px 0 #ddd, 80px 35px 0 -6px #ddd, 4px 35px 0 -4px #ddd, 88px 38px 0 -4px #ddd;\
+        box-shadow: 80px 8px 0 -7.5px #3f3334,    92px 20px 0 -9px #888, 93px 21px 0 -9px #888, 94px 21px 0 -9px #888, 95px 21px 0 -9px #888,     10px 40px 0 #ddd, 80px 35px 0 -6px #ddd, 4px 35px 0 -4px #ddd, 88px 38px 0 -4px #ddd;\
     }\
     \
     .rabbit:after {\
@@ -326,19 +326,19 @@
     \
     @-webkit-keyframes mouth {\
     0% {\
-        box-shadow: 80px 8px 0 -8px #3f3334,    92px 20px 0 -9px #888,  93px 21px 0 -9px #888,  94px 21px 0 -9px #888, 95px 21px 0 -9px #888,     10px 40px 0 #ddd, 80px 35px 0 -6px #ddd, 4px 35px 0 -4px #ddd, 88px 38px 0 -4px #ddd;\
+        box-shadow: 80px 8px 0 -7.5px #3f3334,    92px 20px 0 -9px #888,  93px 21px 0 -9px #888,  94px 21px 0 -9px #888, 95px 21px 0 -9px #888,     10px 40px 0 #ddd, 80px 35px 0 -6px #ddd, 4px 35px 0 -4px #ddd, 88px 38px 0 -4px #ddd;\
     }\
     50% {\
-        box-shadow: 80px 8px 0 -8px #3f3334,    92px 20px 0 -10px #888, 93px 21px 0 -10px #888, 94px 21px 0 -9px #888, 95px 21px 0 -9px #888,     10px 40px 0 #ddd, 80px 35px 0 -6px #ddd, 4px 35px 0 -4px #ddd, 88px 38px 0 -4px #ddd;\
+        box-shadow: 80px 8px 0 -7.5px #3f3334,    92px 20px 0 -10px #888, 93px 21px 0 -10px #888, 94px 21px 0 -9px #888, 95px 21px 0 -9px #888,     10px 40px 0 #ddd, 80px 35px 0 -6px #ddd, 4px 35px 0 -4px #ddd, 88px 38px 0 -4px #ddd;\
     }\
     }\
     \
     @keyframes mouth {\
     0% {\
-        box-shadow: 80px 8px 0 -8px #3f3334,    92px 20px 0 -9px #888,  93px 21px 0 -9px #888,  94px 21px 0 -9px #888, 95px 21px 0 -9px #888,     10px 40px 0 #ddd, 80px 35px 0 -6px #ddd, 4px 35px 0 -4px #ddd, 88px 38px 0 -4px #ddd;\
+        box-shadow: 80px 8px 0 -7.5px #3f3334,    92px 20px 0 -9px #888,  93px 21px 0 -9px #888,  94px 21px 0 -9px #888, 95px 21px 0 -9px #888,     10px 40px 0 #ddd, 80px 35px 0 -6px #ddd, 4px 35px 0 -4px #ddd, 88px 38px 0 -4px #ddd;\
     }\
     50% {\
-        box-shadow: 80px 8px 0 -8px #3f3334,    92px 20px 0 -10px #888, 93px 21px 0 -10px #888, 94px 21px 0 -9px #888, 95px 21px 0 -9px #888,     10px 40px 0 #ddd, 80px 35px 0 -6px #ddd, 4px 35px 0 -4px #ddd, 88px 38px 0 -4px #ddd;\
+        box-shadow: 80px 8px 0 -7.5px #3f3334,    92px 20px 0 -10px #888, 93px 21px 0 -10px #888, 94px 21px 0 -9px #888, 95px 21px 0 -9px #888,     10px 40px 0 #ddd, 80px 35px 0 -6px #ddd, 4px 35px 0 -4px #ddd, 88px 38px 0 -4px #ddd;\
     }\
     }\
     \
@@ -347,7 +347,7 @@
         position: fixed;\
         left: 0;\
         bottom: 0;\
-        width: 100px;\
+        width: 200px;\
         height: 100px;\
     }\
     rabbitrobberheap {\
@@ -355,7 +355,7 @@
         position: relative;\
         left: 0;\
         bottom: 0;\
-        width: 100px;\
+        width: 200px;\
         height: 100px;\
     }\
     rabbitrobberheap span{\
@@ -363,7 +363,7 @@
         font-weight: bold;\
         display: block;\
         position: absolute;\
-        left: 50%;\
+        left: 25%;\
         bottom: 50%;\
         transition: left 0.7s ease-in 0.3s, bottom 0.7s ease-in 0.3s\
     }\
