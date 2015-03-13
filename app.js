@@ -23,7 +23,10 @@
             {
                 for (var i = 0, len = node.childNodes.length; i < len; ++i)
                 {
-                    getTextNodes(node.childNodes[i]);
+                    if (node.childNodes[i].tagName != 'STYLE' && node.childNodes[i].tagName != 'SCRIPT' && node.childNodes[i].tagName != 'SCRIPT' && node.childNodes[i].tagName != 'RABBITROBBERVICTIM')
+                    {
+                        getTextNodes(node.childNodes[i]);
+                    }
                 }
             }
         }
@@ -34,7 +37,7 @@
         for (var i = 0; i < textNodes.length; ++i)
         {
             var n = textNodes[i];
-            if (n.parentNode.tagName !== 'rabbitrobbervictim')
+            if (n.parentNode.tagName !== 'RABBITROBBERVICTIM')
             {
                 var vel = document.createElement('rabbitrobbervictim');
                 n.parentNode.insertBefore(vel, n);
@@ -79,6 +82,7 @@
         return (
             rect.top >= 0 &&
             rect.left >= 0 &&
+            (rect.left > 0 || rect.top > 0) &&
             rect.top <= (window.innerHeight || document.documentElement.clientHeight) &&
             rect.left <= (window.innerWidth || document.documentElement.clientWidth)
         );
@@ -99,7 +103,7 @@
                 var el = this.getRandomEl(els);
                 ++tries;
             }
-            while ((!el || !el.innerText.length || !this.isElementInViewport(el)) && tries < 200);
+            while ((!el || !el.innerText || !el.innerText.length || !this.isElementInViewport(el)) && tries < 200);
         }
 
         if (tries < 200 && el)
@@ -163,6 +167,10 @@
     var style = document.createElement('style');
     style.type = 'text/css';
     style.innerHTML = '\
+    rabbitrobbervictim {\
+        display: inline;\
+    }\
+    \
     .rabbit-ct {\
         width: 100px;\
         height: 60px;\
