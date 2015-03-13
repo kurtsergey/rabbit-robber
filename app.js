@@ -124,6 +124,8 @@
         this.elCt.style.left = (bounds.left - 60 + (Math.random() - 0.5) * 10) + 'px';
         this.elCt.style.top = (bounds.top - 25 + (Math.random() - 0.5) * 5) + 'px';
 
+        victim.countStolen = 0;
+
         setTimeout(this.rob.bind(this, victim), 1500);
     }
 
@@ -136,9 +138,9 @@
         }
 
         victim.textContent = victim.textContent.substr(1);
-        victim.count = (victim.count || 0) + 1;
+        victim.countStolen = (victim.countStolen || 0) + 1;
 
-        if (victim.count >= 10 || !victim.textContent.length)
+        if (victim.countStolen >= 10 || !victim.textContent.length)
         {
             this.el.classList.remove('eaten');
             setTimeout(this.selectVictim.bind(this), 300);
