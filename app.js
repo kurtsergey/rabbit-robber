@@ -1,15 +1,33 @@
 ﻿
+
 (function ()
 {
 
-    function getRandomEl(items)
+
+    window.RabbitRobber = function ()
+    {
+        var ct = this.elCt = document.createElement('div');
+        ct.className = 'rabbit-ct';
+        document.body.appendChild(ct);
+
+
+        var r = this.el = document.createElement('div');
+        r.className = 'rabbit';
+        ct.appendChild(r);
+
+
+        setTimeout(this.selectVictim.bind(this), 200);
+    };
+
+
+    window.RabbitRobber.prototype.getRandomEl = function getRandomEl(items)
     {
         var r = Math.floor(Math.random() * items.length);
         return items[r];
     }
 
 
-    function getTextNodesIn(node, includeWhitespaceNodes)
+    window.RabbitRobber.prototype.getTextNodesIn = function getTextNodesIn(node, includeWhitespaceNodes)
     {
         var textNodes = [], nonWhitespaceMatcher = /\S/;
 
@@ -35,25 +53,20 @@
     }
 
 
-
-
-
-    function isElementInViewport(el)
+    window.RabbitRobber.prototype.isElementInViewport = function isElementInViewport(el)
     {
         var rect = el.getBoundingClientRect();
 
         return (
             rect.top > 0 &&
             rect.left > 0 &&
-            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && /*or $(window).height() */
-            rect.right <= (window.innerWidth || document.documentElement.clientWidth) /*or $(window).width() */
+            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+            rect.right <= (window.innerWidth || document.documentElement.clientWidth)
         );
     }
 
 
-
-
-    function selectVictim()
+    window.RabbitRobber.prototype.selectVictim = function selectVictim()
     {
         var els = document.querySelectorAll('* *:not(title)');
 
@@ -62,51 +75,48 @@
         {
             do
             {
-                var el = getRandomEl(els);
+                var el = this.getRandomEl(els);
                 var s = el.innerText;
                 ++tries;
             }
-            while ((!s || !s.length || !isElementInViewport(el)) && tries < 1000);
+            while ((!s || !s.length || !this.isElementInViewport(el)) && tries < 1000);
 
-            var nodes = getTextNodesIn(el);
+            var nodes = this.getTextNodesIn(el);
         }
         while (!nodes.length && tries < 1000)
 
         if (tries < 1000)
         {
-            var n = getRandomEl(nodes);
+            var n = this.getRandomEl(nodes);
 
-            moveChicken({
+            this.move({
                 el: el,
                 textNode: n
             });
         }
         else
         {
-            setTimeout(selectVictim, 3000);
+            setTimeout(this.selectVictim.bind(this), 3000);
         }
     }
 
 
-
-
-
-    function moveChicken(victim)
+    window.RabbitRobber.prototype.move = function move(victim)
     {
         var bounds = victim.el.getBoundingClientRect();
 
-        div.style.left = (bounds.left - 60 + (Math.random() - 0.5) * 10) + 'px';
-        div.style.top = (bounds.top - 25 + (Math.random() - 0.5) * 5) + 'px';
+        this.elCt.style.left = (bounds.left - 60 + (Math.random() - 0.5) * 10) + 'px';
+        this.elCt.style.top = (bounds.top - 25 + (Math.random() - 0.5) * 5) + 'px';
 
-        setTimeout(thieveChair.bind(this, victim), 1500);
+        setTimeout(this.rob.bind(this, victim), 1500);
     }
 
 
-    function thieveChair(victim)
+    window.RabbitRobber.prototype.rob = function rob(victim)
     {
-        if (!chicken.classList.contains('eaten'))
+        if (!this.el.classList.contains('eaten'))
         {
-            chicken.classList.add('eaten');
+            this.el.classList.add('eaten');
         }
 
         victim.textNode.textContent = victim.textNode.textContent.substr(1);
@@ -114,33 +124,18 @@
 
         if (victim.count >= 10 || !victim.textNode.textContent.length)
         {
-            chicken.classList.remove('eaten');
-            setTimeout(selectVictim, 300);
+            this.el.classList.remove('eaten');
+            setTimeout(this.selectVictim.bind(this), 300);
         }
         else
         {
-            setTimeout(thieveChair.bind(this, victim), 200);
+            setTimeout(this.rob.bind(this, victim), 200);
         }
     }
 
 
 
-
-
-
-    var div = document.createElement('div');
-    div.className = 'rabbit-ct';
-    document.body.appendChild(div);
-
-    var chicken = document.createElement('div');
-    chicken.className = 'rabbit';
-    div.appendChild(chicken);
-
-
-    setTimeout(selectVictim, 200);
-
-
-
+    new RabbitRobber();
 
 
 
@@ -271,4 +266,5 @@
 
 
 })();
+
 
