@@ -103,7 +103,7 @@
                 var el = this.getRandomEl(els);
                 ++tries;
             }
-            while ((!el || !el.innerText || !el.innerText.length || !this.isElementInViewport(el)) && tries < 200);
+            while ((!el || !el.textContent || !el.textContent.length || !this.isElementInViewport(el)) && tries < 200);
         }
 
         if (tries < 200 && el)
