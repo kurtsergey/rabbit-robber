@@ -2,6 +2,7 @@
 
 (function ()
 {
+    var RADIUS = 25;
 
 
     function wrapAllVictims()
@@ -49,6 +50,27 @@
             }
         }
     }
+
+
+    function replaceAllImages()
+    {
+        var images = document.querySelectorAll('img');
+        for (var i = 0 ; i < images.length; ++i)
+        {
+            var img = images[i];
+
+            var canvas = document.createElement("canvas");
+            canvas.width = img.width;
+            canvas.height = img.height;
+            img.parentNode.insertBefore(canvas, img.nextSibling);
+
+            var ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0, img.width, img.height);
+
+            img.remove();
+        }
+    }
+
 
 
 
@@ -101,22 +123,46 @@
 
     window.RabbitRobber.prototype.selectVictim = function selectVictim()
     {
-        var els = document.querySelectorAll('rabbitrobbervictim');
-
         var el,
+            els,
             tries = 0;
 
-        if (els.length)
+        if (Math.random() < 0.5)
         {
-            do
+            els = document.querySelectorAll('rabbitrobbervictim')
+
+            if (els.length)
             {
-                var el = this.getRandomEl(els);
-                ++tries;
+                do
+                {
+                    el = this.getRandomEl(els);
+                    ++tries;
+                }
+                while ((!el || !el.textContent || !el.textContent.length || !this.isElementInViewport(el)) && tries < 200);
             }
-            while ((!el || !el.textContent || !el.textContent.length || !this.isElementInViewport(el)) && tries < 200);
+
+        }
+        else
+        {
+            els = document.querySelectorAll('canvas');
+
+            if (els.length)
+            {
+                do
+                {
+                    el = this.getRandomEl(els);
+                    ++tries;
+                }
+                while ((!el || !this.isElementInViewport(el)) && tries < 200);
+            }
         }
 
-        if (tries < 200 && el)
+        if (tries == 200)
+        {
+            el = null;
+        }
+
+        if (el)
         {
             this.move(el);
         }
@@ -126,17 +172,77 @@
             setTimeout(function ()
             {
                 self.selectVictim();
-            }, 3000);
+            }, 1000);
         }
-    }
+    };
+
+    window.RabbitRobber.prototype.selectPositionAtCanvas = function selectPositionAtCanvas(canvas)
+    {
+        var ctx = canvas.getContext("2d");
+
+        var x = 0,
+            y = null;
+
+        while (y == null && canvas.width != 0 && canvas.height != 0)
+        {
+            var imageData = ctx.getImageData(0, 0, 1, canvas.height);
+            var data = imageData.data;
+            var candidates = [];
+
+            for (i = 0; i < data.length; i += RADIUS * 4)
+            {
+                if (data[i + 3] > 0)
+                {
+                    candidates.push(i / 4);
+                }
+            }
+
+            if (candidates.length)
+            {
+                y = this.getRandomEl(candidates);
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        if (y !== null)
+        {
+            canvas.RABBITROBBER_Y = y;
+
+            return {
+                x: x,
+                y: y
+            };
+        }
+    };
 
 
     window.RabbitRobber.prototype.move = function move(victim)
     {
-        var bounds = victim.getBoundingClientRect();
+        var bounds = victim.getBoundingClientRect(),
+            x = bounds.left,
+            y = bounds.top;
 
-        this.elCt.style.left = (bounds.left - 60 + (Math.random() - 0.5) * 10) + 'px';
-        this.elCt.style.top = (bounds.top - 25 + (Math.random() - 0.5) * 5) + 'px';
+        if (victim.nodeName == 'CANVAS')
+        {
+            var p = this.selectPositionAtCanvas(victim);
+            if (p)
+            {
+                x += p.x;
+                y += p.y;
+            }
+            else
+            {
+                victim.remove();
+                this.selectVictim();
+                return;
+            }
+        }
+
+        this.elCt.style.left = (x - 60 + (Math.random() - 0.5) * 10) + 'px';
+        this.elCt.style.top = (y - 25 + (Math.random() - 0.5) * 5) + 'px';
 
         victim.countStolen = 0;
 
@@ -156,16 +262,33 @@
             this.el.classList.add('eaten');
         }
 
-        this.stolen.push(victim.textContent[0]);
-        victim.textContent = victim.textContent.substr(1);
+        var empty = false;
+        var count = 5 + Math.random() * 5;
+
+        if (victim.nodeName == 'CANVAS')
+        {
+            var ctx = victim.getContext("2d");
+            ctx.putImageData(ctx.getImageData(RADIUS, victim.RABBITROBBER_Y, victim.width, RADIUS), 0, victim.RABBITROBBER_Y);
+        }
+        else
+        {
+            this.stolen.push(victim.textContent[0]);
+            victim.textContent = victim.textContent.substr(1);
+            if (!victim.textContent.length)
+            {
+                empty = true;
+                victim.remove();
+            }
+        }
+
         victim.countStolen = (victim.countStolen || 0) + 1;
 
         var self = this;
 
-        if (victim.countStolen >= 10 || !victim.textContent.length)
+        if (victim.countStolen >= count || empty)
         {
             this.el.classList.remove('eaten');
-            if (Math.random() > 0.7)
+            if (this.stolen.length && Math.random() > 0.7)
             {
                 setTimeout(function ()
                 {
@@ -237,13 +360,6 @@
 
 
 
-    wrapAllVictims();
-    setInterval(wrapAllVictims, 5000);
-
-
-    new RabbitRobber();
-
-
     var heapct = document.createElement('rabbitrobberheapct');
     document.body.appendChild(heapct);
 
@@ -251,6 +367,26 @@
     heapct.appendChild(heap);
     heap.countDumped = 0;
 
+
+    var start = function ()
+    {
+        wrapAllVictims();
+        setInterval(wrapAllVictims, 5000);
+
+        replaceAllImages();
+
+        new RabbitRobber();
+
+    };
+
+    if (document.readyState == 'complete')
+    {
+        start();
+    }
+    else
+    {
+        window.addEventListener('load', start);
+    }
 
 
 
@@ -405,6 +541,7 @@
     }\
 ';
     document.getElementsByTagName('head')[0].appendChild(style);
+
 
 
 })();
